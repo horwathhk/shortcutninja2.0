@@ -5,6 +5,7 @@ export default class Scoreboard extends Component {
     return (
       <div>
         <table class="scorecard">
+          {this.props.libraryName}
           <thead />
           <tbody>
             <tr style={{ marginRight: "-20%" }}>

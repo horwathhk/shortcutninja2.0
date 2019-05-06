@@ -9,24 +9,21 @@ const ShortcutsSchema = new Schema({
     type: String,
     require: true
   },
+  libraryDescription: {
+    type: String,
+    require: true
+  },
   actions: [
     {
       actionName: String,
-      keyCodes: [Number],
-      keyNames: [String]
+      keyCodes: [
+        {
+          keyCode: Number,
+          keyName: String
+        }
+      ]
     }
   ]
 });
-
-// keyCodes:[
-//   {
-//     keyCode:Number
-//     keyName:String
-//   },
-//   {
-//     keyCode,
-//     keyName
-//   }
-// ]
 
 module.exports = mongoose.model("Shortcuts", ShortcutsSchema);

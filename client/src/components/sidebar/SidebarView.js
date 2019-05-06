@@ -38,7 +38,7 @@ export default class SidebarView extends Component {
                   <li class="nav-divider">Menu</li>
                   <li class="nav-item ">
                     <a
-                      class="nav-link active"
+                      class="nav-link"
                       href="#"
                       // data-toggle="collapse"
                       aria-expanded="false"
@@ -159,7 +159,7 @@ export default class SidebarView extends Component {
                   </li>
                   <li class="nav-item">
                     <a
-                      class="nav-link"
+                      class="nav-link "
                       href="#"
                       // data-toggle="collapse"
                       aria-expanded="false"

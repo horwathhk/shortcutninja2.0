@@ -5,18 +5,20 @@ import { addShortCutLibraryMutation } from "../../../queries/queries";
 import { graphql, compose } from "react-apollo";
 
 let libraryName;
+let libraryDescription = "";
 let actionsArray = [{}];
 
 let actionName;
-let keyCodes = [];
-let keyNames = [];
-
+let keyCodes = [{}];
+let keyCode;
+let keyName;
 class AddLibrary extends Component {
   constructor(props) {
     super(props);
     this.state = {
       rows: ["row 1"],
       libraryName: "",
+      libraryDescription: "",
       actionName: "",
       keyCode1: null,
       keyCode2: null,
@@ -32,37 +34,42 @@ class AddLibrary extends Component {
     rows.push("new row");
     this.setState({ rows: rows });
 
-    // console.log(keyCode1);
-    // console.log(keyCode2);
-    keyCodes.push(keyCode1, keyCode2);
-    keyNames.push(keyName1, keyName2);
-    // console.log(keyCodes);
-    actionsArray.push({
-      actionName,
-      keyCodes,
-      keyNames
+    keyCode = keyCode1;
+    keyName = keyName1;
+
+    keyCodes.push({
+      keyCode,
+      keyName
+    });
+    console.log(keyCodes);
+
+    keyCode = keyCode2;
+    keyName = keyName2;
+
+    keyCodes.push({
+      keyCode,
+      keyName
     });
 
-    // console.log(actionsArray);
-    keyCode1 = null;
-    keyCode2 = null;
-    keyName1 = null;
-    keyName2 = null;
-    keyCodes = [];
+    actionsArray.push({
+      actionName,
+      keyCodes
+    });
 
-    // console.log("empty keycodes");
+    console.log(actionsArray);
+    keyCode = null;
+    keyName = null;
+    keyCodes = [{}];
+    actionName = "";
   };
 
   submitForm = async e => {
     e.preventDefault();
-    // console.log("form woking");
-    // console.log(actionsArray);
-
-    // let { libraryName, actionName, keyCodes, actions } = this.state;
-
+    console.log(typeof actionArray);
     const addShortcut = await this.props.addShortCutLibraryMutation({
       variables: {
         libraryName: libraryName,
+        libraryDescription: libraryDescription,
         actions: actionsArray
       }
     });
@@ -84,9 +91,10 @@ class AddLibrary extends Component {
             practice!
           </p>
           <hr />
-          <h2>Name Your Shortcut Library</h2>
+          <h2>Shortcut Library Name and Description</h2>
           <p class="lead">
-            Give your library a name so you can select it later.
+            Give your library a name and description so users can select it
+            later.
           </p>
           <Form onSubmit={this.submitForm.bind(this)}>
             <FormGroup>
@@ -101,18 +109,44 @@ class AddLibrary extends Component {
                 }}
               />
             </FormGroup>
+            <FormGroup>
+              <Label id="exampleFormControlInput1">Library Description</Label>
+              <Input
+                type="text"
+                className="form-control"
+                id="email"
+                placeholder="ex: This library focuses on efficiency in New Layer Mask"
+                onChange={e => {
+                  libraryDescription = e.target.value;
+                }}
+              />
+            </FormGroup>
+            <hr />
             <h2>Add Your Keyboard Shortcuts</h2>
-            <p class="lead">
-              Below, please provide the following:
-              <br />
+            <p class="lead">Below, please provide the following:</p>
+
+            <h5>
+              {" "}
+              <strong>Action Name</strong>:This describes what the action does.
+              <a href="https://keycode.info/">Keycode.info</a>
+            </h5>
+            <h5>
+              {" "}
               <strong>keyCodes</strong>:These are the keycodes for the keys that
               make up your shortcut (ex: "ctrl" has a keyCode of 17). You can
               find all keyCodes at{" "}
               <a href="https://keycode.info/">Keycode.info</a>
-            </p>
+            </h5>
+            <h5>
+              {" "}
+              <strong>Key Names</strong>:These are the names of the keys that
+              the user needs to press to use the action.
+              <a href="https://keycode.info/">Keycode.info</a>
+            </h5>
+
             <div>
               {rows.map(row => (
-                <div className="container">
+                <div>
                   <div className="row">
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
                       <FormGroup>

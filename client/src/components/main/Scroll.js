@@ -11,6 +11,7 @@ import { Query } from "react-apollo";
 import { getCurrentLibraryQuery } from "../../queries/queries";
 import { graphql, compose } from "react-apollo";
 import Ninja from "../../images/Ninja.png.png";
+import ShortCutKeys from "./ShortCutKeys";
 //reference
 //https://medium.com/dev-red/tutorial-animate-the-opening-star-wars-crawl-in-a-react-app-with-greensock-bc55a5d05d24
 
@@ -21,11 +22,11 @@ class Scroll extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      libaryName: null,
       playerReady: false,
       keyPressedKey: [],
       keyPressedName: null,
-      shortCutKey: [],
+      shortCutKeys: [],
+      shortCutKeysNames: [],
       shortCutName: "",
       shortcuts: [],
       success: false,
@@ -70,18 +71,26 @@ class Scroll extends Component {
 
   //Get the Current Shortcut From ShortCut Display
   getShortcut = shortcut => {
+    //get shortcut from database
     console.log(shortcut);
-    this.setState(
-      { shortCutKey: shortcut.keyCodes, shortCutName: shortcut.actionName },
-      function() {
-        let { shortCutKey } = this.state;
-      }
-    );
+    //For each shorcut, I am pushing the keyCode to one array and the keyName to another
+    let keyCodes = [];
+    let keyNames = [];
+    shortcut.keyCodes.map(keyCode => keyCodes.push(keyCode.keyCode));
+    shortcut.keyCodes.map(keyCode => keyNames.push(keyCode.keyName));
+    console.log(keyCodes);
+    console.log(keyNames);
+
+    //set state so that we have access to the keyCodes and keyNames from state
+    this.setState({
+      shortCutKeys: keyCodes,
+      shortCutKeysNames: keyNames,
+      shortCutName: shortcut.actionName
+    });
   };
 
-  //Get each Keypress from ShortCut Display
-
   getKeyPressed = keyPressed => {
+    //get each button that the user presses on keyDown and set them to state.
     console.log(keyPressed);
     this.setState({ keyPressedKey: keyPressed }, function() {
       console.log("state in keyPRessed!!");
@@ -93,22 +102,24 @@ class Scroll extends Component {
   //Check Answer
   checkAnswer = () => {
     console.log("****Check Answer FUNCTION****");
-    let { keyPressedKey, shortCutKey } = this.state;
+    let { keyPressedKey, shortCutKeys } = this.state;
     let showSuccessMessage = null;
     let showFailureMessage = null;
     let i;
-    console.log(shortCutKey);
+    console.log(ShortCutKeys);
     console.log(keyPressedKey);
+    //check length of keypressed array
     if (keyPressedKey.length > 0) {
       console.log(keyPressedKey);
-      for (i = 0; i < shortCutKey.length; ++i) {
-        if (keyPressedKey[i] === shortCutKey[i]) {
+      //compare keyPressed with the shortcutKeys
+      for (i = 0; i < shortCutKeys.length; ++i) {
+        if (keyPressedKey[i] === shortCutKeys[i]) {
           showSuccessMessage = true;
         } else {
           showFailureMessage = true;
         }
       }
-      if (i === shortCutKey.length) {
+      if (i === shortCutKeys.length) {
         if (showFailureMessage === true) {
           this.showFailureMessage();
         } else if (showSuccessMessage === true) {
@@ -120,7 +131,7 @@ class Scroll extends Component {
 
   showSuccessMessage() {
     let {
-      shortCutKey,
+      shortCutKeys,
       success,
       failure,
       displayText,
@@ -151,7 +162,13 @@ class Scroll extends Component {
   }
 
   showFailureMessage() {
-    let { shortCutKey, success, failure, displayText, propToggle } = this.state;
+    let {
+      ShortCutKeys,
+      success,
+      failure,
+      displayText,
+      propToggle
+    } = this.state;
     this.setState(
       {
         failure: true,
@@ -175,7 +192,7 @@ class Scroll extends Component {
   render() {
     let {
       playerReady,
-      shortCutKey,
+      shortCutKeys,
       shortCutName,
       success,
       failure,
@@ -184,7 +201,8 @@ class Scroll extends Component {
       showShortcut,
       propToggle,
       scoreCounter,
-      libraryName
+      libraryName,
+      shortCutKeysNames
     } = this.state;
     let content;
     let message;
@@ -211,8 +229,8 @@ class Scroll extends Component {
               aria-hidden="true"
             />
             Wrong! The shortcut for the {shortCutName} is:
-            <br /> {shortCutKey[0]} + {""}
-            {shortCutKey[1]}
+            <br /> {shortCutKeysNames[0]} + {""}
+            {shortCutKeysNames[1]}
           </h1>
           <h4 class="text-muted text-center">
             You got {scoreCounter} answers correct in a row!
@@ -224,6 +242,7 @@ class Scroll extends Component {
     return (
       <div style={{ marginBottom: "2%" }} className="container">
         <div className="row">
+          {this.props.librayName}
           <div className="col" />
           {this.props.libraryName ? (
             <div className="col">
@@ -285,7 +304,10 @@ class Scroll extends Component {
               <div class="row">
                 <div class="col-8" />
                 <div class="col-4">
-                  <Scoreboard scoreCounter={scoreCounter} />
+                  <Scoreboard
+                    libraryName={this.props.libraryName}
+                    scoreCounter={scoreCounter}
+                  />
                 </div>
               </div>
 

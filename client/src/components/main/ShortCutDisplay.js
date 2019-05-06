@@ -9,11 +9,6 @@ export default class ShortCutDisplay extends Component {
     this.state = {
       playerReady: null,
       shortCut: null,
-      shortcuts: [
-        { keyCodes: "shift + d", shortCutName: [16, 68] },
-        { keyCodes: "shift + g", shortCutName: [16, 71] },
-        { keyCodes: "shift + x", shortCutName: [16, 88] }
-      ],
       keyPressedKeys: []
     };
   }
@@ -52,7 +47,9 @@ export default class ShortCutDisplay extends Component {
     let { shortcuts, keyPressed } = this.state;
 
     this.setState({ shortcuts: this.props.shortcuts }, function() {
+      let { shortcuts } = this.state;
       if (this.props.playerReady !== this.state.playerReady) {
+        console.log(this.state.shortcuts);
         let newshortcut = this.state.shortcuts[
           Math.floor(Math.random() * shortcuts.length)
         ];

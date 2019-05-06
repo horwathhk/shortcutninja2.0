@@ -23,6 +23,7 @@ let LibraryType = new GraphQLObjectType({
   fields: () => ({
     _id: { type: GraphQLID },
     libraryName: { type: GraphQLString },
+    libraryDescription: { type: GraphQLString },
     actions: { type: GraphQLList(ActionsType) }
   })
 });
@@ -32,7 +33,8 @@ let NewShortcutLibraryType = new GraphQLInputObjectType({
   fields: () => ({
     library_id: { type: GraphQLID },
     libraryName: { type: GraphQLString },
-    action: { type: GraphQLList(NewActionsType) }
+    libraryDescription: { type: GraphQLString },
+    actions: { type: GraphQLList(NewActionsType) }
   })
 });
 
@@ -40,8 +42,7 @@ let ActionsType = new GraphQLObjectType({
   name: "Actions",
   fields: () => ({
     actionName: { type: GraphQLString },
-    keyCodes: { type: GraphQLList(GraphQLInt) },
-    keyNames: { type: GraphQLList(GraphQLString) }
+    keyCodes: { type: GraphQLList(KeyCodeType) }
   })
 });
 
@@ -49,22 +50,23 @@ let NewActionsType = new GraphQLInputObjectType({
   name: "NewActions",
   fields: () => ({
     actionName: { type: GraphQLString },
-    keyCodes: { type: GraphQLList(GraphQLInt) },
-    keyNames: { type: GraphQLList(GraphQLString) }
+    keyCodes: { type: GraphQLList(NewKeyCodeType) }
   })
 });
 
 let KeyCodeType = new GraphQLObjectType({
   name: "KeyCodeType",
   fields: () => ({
-    keyCode: { type: GraphQLInt }
+    keyCode: { type: GraphQLInt },
+    keyName: { type: GraphQLString }
   })
 });
 
 let NewKeyCodeType = new GraphQLInputObjectType({
   name: "NewKeyCodeType",
   fields: () => ({
-    keyCode: { type: GraphQLInt }
+    keyCode: { type: GraphQLInt },
+    keyName: { type: GraphQLString }
   })
 });
 
@@ -115,11 +117,13 @@ const mutation = new GraphQLObjectType({
       type: new GraphQLList(LibraryType),
       args: {
         libraryName: { type: GraphQLString },
+        libraryDescription: { type: GraphQLString },
         actions: { type: new GraphQLList(NewActionsType) }
       },
       resolve(parent, args) {
         let shortcut = new Shortcuts({
           libraryName: args.libraryName,
+          libraryDescription: args.libraryDescription,
           actions: args.actions
         });
         console.log(shortcut);

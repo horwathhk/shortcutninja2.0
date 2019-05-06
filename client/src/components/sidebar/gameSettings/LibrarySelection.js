@@ -1,6 +1,21 @@
 import React, { Component } from "react";
 
 export default class LibrarySelection extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      checked: false
+    };
+    this.handleCheck = this.handleCheck.bind(this);
+  }
+
+  handleCheck(e) {
+    console.log("check fired");
+    this.setState({
+      checked: e.target.checked
+    });
+  }
+
   render() {
     return (
       <div>
@@ -13,6 +28,8 @@ export default class LibrarySelection extends Component {
                 id="blankCheckbox"
                 value="option1"
                 aria-label="..."
+                onChange={this.handleCheck}
+                checked={this.state.checked}
                 onClick={this.props.getLibraryName.bind(
                   this,
                   this.props.shortcutLibrary.libraryName

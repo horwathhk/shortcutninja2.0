@@ -4,9 +4,13 @@ const getAllLibrariesQuery = gql`
   {
     getAllLibraries {
       libraryName
+      libraryDescription
       actions {
         actionName
-        keyCodes
+        keyCodes {
+          keyCode
+          keyName
+        }
       }
     }
   }
@@ -17,18 +21,29 @@ const getCurrentLibraryQuery = gql`
     getCurrentLibrary(libraryName: $libraryName) {
       _id
       libraryName
+      libraryDescription
       actions {
         actionName
-        keyCodes
-        keyNames
+        keyCodes {
+          keyCode
+          keyName
+        }
       }
     }
   }
 `;
 
 const addShortCutLibraryMutation = gql`
-  mutation($libraryName: String!, $actions: [NewActions!]!) {
-    addShortcutLibrary(libraryName: $libraryName, actions: $actions) {
+  mutation(
+    $libraryName: String!
+    $libraryDescription: String!
+    $actions: [NewActions!]!
+  ) {
+    addShortcutLibrary(
+      libraryName: $libraryName
+      libraryDescription: $libraryDescription
+      actions: $actions
+    ) {
       libraryName
     }
   }
