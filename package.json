@@ -1,31 +1,37 @@
 {
   "name": "ninja",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-scripts": "3.0.0"
-  },
+  "version": "1.0.0",
+  "description": "Academy app",
+  "main": "server.js",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "node server.js",
+    "server": "nodemon server.js"
   },
-  "eslintConfig": {
-    "extends": "react-app"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/horwathhk/shortcutninja2.0.git"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "author": "Aaron",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/horwathhk/shortcutninja2.0/issues"
+  },
+  "homepage": "https://github.com/horwathhk/shortcutninja2.0#readme",
+  "dependencies": {
+    "apollo-boost": "^0.3.1",
+    "async": "^2.6.2",
+    "body-parser": "^1.19.0",
+    "body-parser-graphql": "^1.1.0",
+    "concurrently": "^4.1.0",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "express-graphql": "^0.8.0",
+    "graphql": "^14.2.1",
+    "mongoose": "^5.5.4",
+    "pg-promise": "^8.6.5",
+    "react-apollo": "^2.5.5"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.11"
   }
 }
